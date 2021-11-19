@@ -1,13 +1,8 @@
 /**
- * Copyright (C) 2009 Samir Chekkal
+ * Copyright (C) 2009 Samir Chekkal, 2021 Taico Aerts
  * This program is distributed under the terms of the GNU General Public License.
  */
-
-/**
- * @author chekkal
- *
- */
-package javashot.util;
+package nl.taico.javashot.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,13 +15,13 @@ import java.util.regex.Pattern;
  */
 
 public class Properties {
-	private static java.util.Properties properties = new java.util.Properties();
+	private static final java.util.Properties properties = new java.util.Properties();
 	static {
 		try {
 			properties.load(new FileInputStream(getJavashotHome() + "/javashot.properties"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Couldn't load javashot.properties");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			throw new RuntimeException("Couldn't load javashot.properties", ex);
 		}
 	}
 
@@ -53,7 +48,7 @@ public class Properties {
 		if (instrumentationClassPattern == null || instrumentationClassPattern.isEmpty()) {
 			return null;
 		}
-		ArrayList<Pattern> result = new ArrayList<Pattern>();
+		ArrayList<Pattern> result = new ArrayList<>();
 		StringTokenizer tokens = new StringTokenizer(instrumentationClassPattern, ",");
 		while (tokens.hasMoreElements()) {
 			result.add(Pattern.compile(tokens.nextToken().trim().toLowerCase()));
@@ -70,7 +65,7 @@ public class Properties {
 		if (instrumentationClassPattern == null || instrumentationClassPattern.isEmpty()) {
 			return null;
 		}
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		StringTokenizer tokens = new StringTokenizer(instrumentationClassPattern, ",");
 		while (tokens.hasMoreElements()) {
 			result.add(tokens.nextToken().trim().toLowerCase());

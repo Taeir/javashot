@@ -1,20 +1,15 @@
 /**
- * Copyright (C) 2009 Samir Chekkal
+ * Copyright (C) 2009 Samir Chekkal, 2021 Taico Aerts
  * This program is distributed under the terms of the GNU General Public License.
  */
-
-/**
- * @author chekkal
- *
- */
-package javashot.instrumentation;
+package nl.taico.javashot.instrumentation;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import javashot.util.Properties;
+import nl.taico.javashot.util.Properties;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -84,9 +79,9 @@ public class GraphAgent implements ClassFileTransformer {
 				}
 				b = clazz.toBytecode();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Could not instrument  " + name + ",  exception : " + e.getMessage());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException("Could not instrument  " + name + ",  exception : " + ex.getMessage(), ex);
 		} finally {
 			if (clazz != null) {
 				clazz.detach();
@@ -98,11 +93,11 @@ public class GraphAgent implements ClassFileTransformer {
 	/**
 	 * Adds static call to methods javashot.graph.Graph.pushNode and javashot.graph.Graph.popNode for every instrumented method.
 	 * 
-	 * @see javashot.graph.Graph#pushNode pushNode
-	 * @see javashot.graph.Graph#pushNode popNode
+	 * @see nl.taico.javashot.graph.Graph#pushNode pushNode
+	 * @see nl.taico.javashot.graph.Graph#popNode popNode
 	 */
 	private void enhanceMethod(CtBehavior method, String className) throws NotFoundException, CannotCompileException {
-		method.insertBefore("javashot.graph.Graph.pushNode(\"" + className + "\",\"" + method.getName() + "\");");
-		method.insertAfter("javashot.graph.Graph.popNode();");
+		method.insertBefore("nl.taico.javashot.graph.Graph.pushNode(\"" + className + "\",\"" + method.getName() + "\");");
+		method.insertAfter("nl.taico.javashot.graph.Graph.popNode();");
 	}
 }
